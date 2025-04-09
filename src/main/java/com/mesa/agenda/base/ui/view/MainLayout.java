@@ -24,7 +24,7 @@ public final class MainLayout extends AppLayout {
 
     public MainLayout() {
         setPrimarySection(Section.DRAWER);
-        addToDrawer(createHeader(), new Scroller(createSideNav()), createUserMenu());
+        addToDrawer(createHeader(), new Scroller(createSideNav()));
     }
 
     private Div createHeader() {
@@ -55,24 +55,5 @@ public final class MainLayout extends AppLayout {
         }
     }
 
-    private Component createUserMenu() {
-        // TODO Replace with real user information and actions
-        var avatar = new Avatar("John Smith");
-        avatar.addThemeVariants(AvatarVariant.LUMO_XSMALL);
-        avatar.addClassNames(Margin.Right.SMALL);
-        avatar.setColorIndex(5);
-
-        var userMenu = new MenuBar();
-        userMenu.addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
-        userMenu.addClassNames(Margin.MEDIUM);
-
-        var userMenuItem = userMenu.addItem(avatar);
-        userMenuItem.add("John Smith");
-        userMenuItem.getSubMenu().addItem("View Profile");
-        userMenuItem.getSubMenu().addItem("Manage Settings");
-        userMenuItem.getSubMenu().addItem("Logout");
-
-        return userMenu;
-    }
 
 }
