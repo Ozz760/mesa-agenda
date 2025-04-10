@@ -26,6 +26,11 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <optional>true</optional>
+            </dependency>
+            <dependency>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-bom</artifactId>
                 <version>${vaadin.version}</version>
