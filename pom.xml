@@ -87,6 +87,12 @@
             <version>${archunit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -165,10 +171,6 @@
                             <artifactId>vaadin-dev</artifactId>
                         </exclusion>
                     </exclusions>
-                </dependency>
-                <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
                 </dependency>
 
                 <!-- Spring Data JPA -->
