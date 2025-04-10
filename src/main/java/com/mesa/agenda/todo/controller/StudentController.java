@@ -18,38 +18,41 @@ public class StudentController {
         this.studentRepository = studentRepository;
     }
 
-    // Get all students
+    // GET all students
     @GetMapping
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
 
-    // Get a single student by ID
+    // GET student by ID
     @GetMapping("/{id}")
     public Student getStudentById(@PathVariable Long id) {
         return studentRepository.findById(id).orElseThrow();
     }
 
-    // Create a new student
+    // POST create student
     @PostMapping
     public Student createStudent(@RequestBody Student student) {
         return studentRepository.save(student);
     }
 
-    // Update a student
+    // PUT update student
     @PutMapping("/{id}")
     public Student updateStudent(@PathVariable Long id, @RequestBody Student updated) {
         Student student = studentRepository.findById(id).orElseThrow();
-        student.setStudentName(updated.getStudentName());
+
         student.setUsername(updated.getUsername());
         student.setEmail(updated.getEmail());
         student.setPassword(updated.getPassword());
+        student.setStudentName(updated.getStudentName());
         student.setRole(updated.getRole());
         student.setActive(updated.isActive());
+        student.setCreatedAt(updated.getCreatedAt());
+
         return studentRepository.save(student);
     }
 
-    // Delete a student by ID
+    // DELETE student
     @DeleteMapping("/{id}")
     public void deleteStudent(@PathVariable Long id) {
         studentRepository.deleteById(id);
