@@ -27,32 +27,36 @@ public final class ViewToolbar extends Composite<Header> {
         var spacer = new Div();
         spacer.getStyle().set("flex-grow", "1");
 
-        var topRow = new Div(drawerToggle, title,spacer,createUserMenu());
-        topRow.getStyle().set("display", "flex").set("align-items", "center").set("width", "100%");
-        getContent().add(topRow);
+        var userMenu = createUserMenu();
 
-//        var toggleAndTitle = new Div(drawerToggle, title);
-//        toggleAndTitle.addClassNames(Display.FLEX, AlignItems.CENTER);
-//        getContent().add(toggleAndTitle);
-
-//        if (components.length > 0) {
-//            var actions = new Div(components);
-//            actions.addClassNames(Display.FLEX, FlexDirection.COLUMN, JustifyContent.BETWEEN, Flex.GROW, Gap.SMALL,
-//                    FlexDirection.Breakpoint.Medium.ROW);
-//            getContent().add(actions);
-//        }
+        Component rightSection;
         if (components.length > 0) {
-            var rightSection = new Div(group(components), createUserMenu());
-            rightSection.getStyle().set("display", "flex").set("align-items", "center").set("gap", "0.5rem");
-
-            var toolbarRow = new Div(drawerToggle,title, rightSection);
-            toolbarRow.getStyle().set("display", "flex").set("align-items", "center").set("width", "100%");
-            toolbarRow.addClassNames(Padding.MEDIUM, Gap.MEDIUM);
-
-            getContent().removeAll();
-            getContent().add(toolbarRow);
+            rightSection = group(components);
+            rightSection.getElement().getStyle()
+                    .set("display", "flex")
+                    .set("align-items", "center")
+                    .set("gap", "0.5rem");
+        } else {
+            rightSection = new Div();
         }
 
+
+        var toolbarRow = new Div(drawerToggle, title, rightSection, spacer, userMenu);
+        toolbarRow.getStyle()
+                .set("display", "flex")
+                .set("align-items", "center")
+                .set("width", "100%");
+        toolbarRow.addClassNames(Padding.MEDIUM, Gap.MEDIUM);
+
+        getContent().removeAll();
+        getContent().add(toolbarRow);
+    }
+
+    public static Component group(Component... components) {
+        var group = new Div(components);
+        group.addClassNames(Display.FLEX, FlexDirection.COLUMN, AlignItems.STRETCH, Gap.SMALL,
+                FlexDirection.Breakpoint.Medium.ROW, AlignItems.Breakpoint.Medium.CENTER);
+        return group;
     }
 
     private Component createUserMenu() {
@@ -73,12 +77,5 @@ public final class ViewToolbar extends Composite<Header> {
         userMenuItem.getSubMenu().addItem("Logout");
 
         return userMenu;
-    }
-
-    public static Component group(Component... components) {
-        var group = new Div(components);
-        group.addClassNames(Display.FLEX, FlexDirection.COLUMN, AlignItems.STRETCH, Gap.SMALL,
-                FlexDirection.Breakpoint.Medium.ROW, AlignItems.Breakpoint.Medium.CENTER);
-        return group;
     }
 }
