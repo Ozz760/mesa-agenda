@@ -7,7 +7,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -29,12 +28,11 @@ import static com.vaadin.flow.spring.data.VaadinSpringDataHelpers.toSpringPageRe
 @Menu(order = 0, icon = "vaadin:clipboard-check", title = "Task List")
 public class TodoView extends Main {
 
-    private final TodoService todoService;
-
     final TextField description;
     final DatePicker dueDate;
     final Button createBtn;
     final Grid<Todo> todoGrid;
+    private final TodoService todoService;
 
     public TodoView(TodoService todoService, Clock clock) {
         this.todoService = todoService;
