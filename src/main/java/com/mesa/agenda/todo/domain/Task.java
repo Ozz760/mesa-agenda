@@ -1,14 +1,13 @@
 package com.mesa.agenda.todo.domain;
+import com.vaadin.flow.component.template.Id;
 import jakarta.persistence.Entity;
 
 import java.time.LocalDateTime;
-
+/*
 @Entity
 public class Task {
 
     //do we need the same @Id from student? Or is it shared by Class.java? etc.
-    //@Id
-    //@GeneratedValue
     //private long id;
 
     private String taskName;
@@ -16,13 +15,6 @@ public class Task {
     private boolean isComplete;
     private LocalDateTime dateCreated;
     private LocalDateTime dueDate;
-
-    //classId foreign key required
-
-    //default constructor for Task
-    public Task() {
-
-    }
 
     //full constructor
     //@TODO: still needs @Id and foreign key values added to constructor
@@ -63,3 +55,4 @@ public class Task {
                 '}';
     }
 }
+*/
