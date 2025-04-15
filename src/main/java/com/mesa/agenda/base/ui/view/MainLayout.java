@@ -23,37 +23,52 @@ import static com.vaadin.flow.theme.lumo.LumoUtility.*;
 public final class MainLayout extends AppLayout {
 
     public MainLayout() {
-        setPrimarySection(Section.DRAWER);
-        addToDrawer(createHeader(), new Scroller(createSideNav()));
+        //This layout is intentionally minimal — no sidebar, no header
+        // The toolbar and content are handled by individual views.
+        // This file is still important as it tells Vaadin where to put routing content
+
     }
-
-    private Div createHeader() {
-        // TODO Replace with real application logo and name
-        var appLogo = VaadinIcon.CUBES.create();
-        appLogo.addClassNames(TextColor.PRIMARY, IconSize.LARGE);
-
-        var appName = new Span("Mesa Agenda");
-        appName.addClassNames(FontWeight.SEMIBOLD, FontSize.LARGE);
-
-        var header = new Div(appLogo, appName);
-        header.addClassNames(Display.FLEX, Padding.MEDIUM, Gap.MEDIUM, AlignItems.CENTER);
-        return header;
-    }
-
-    private SideNav createSideNav() {
-        var nav = new SideNav();
-        nav.addClassNames(Margin.Horizontal.MEDIUM);
-        MenuConfiguration.getMenuEntries().forEach(entry -> nav.addItem(createSideNavItem(entry)));
-        return nav;
-    }
-
-    private SideNavItem createSideNavItem(MenuEntry menuEntry) {
-        if (menuEntry.icon() != null) {
-            return new SideNavItem(menuEntry.title(), menuEntry.path(), new Icon(menuEntry.icon()));
-        } else {
-            return new SideNavItem(menuEntry.title(), menuEntry.path());
-        }
-    }
-
-
 }
+
+
+
+
+
+
+
+
+ //   public MainLayout() {
+//        setPrimarySection(Section.DRAWER);
+//        addToDrawer(createHeader());//new Scroller(createSideNav())
+
+//        addToNavbar(createHeader());
+   // }
+
+//    private Div createHeader() {
+//        // TODO Replace with real application logo and name
+//        var appLogo = VaadinIcon.CUBES.create();
+//        appLogo.addClassNames(TextColor.PRIMARY, IconSize.LARGE);
+//
+//        var appName = new Span("Mesa Agenda");
+//        appName.addClassNames(FontWeight.SEMIBOLD, FontSize.LARGE);
+//
+//        var header = new Div(appLogo, appName);
+//        header.addClassNames(Display.FLEX, Padding.MEDIUM, Gap.MEDIUM, AlignItems.CENTER);
+//        return header;
+//    }
+
+//    private SideNav createSideNav() {
+//        var nav = new SideNav();
+//        nav.addClassNames(Margin.Horizontal.MEDIUM);
+//        MenuConfiguration.getMenuEntries().forEach(entry -> nav.addItem(createSideNavItem(entry)));
+//        return nav;
+//    }
+//
+//    private SideNavItem createSideNavItem(MenuEntry menuEntry) {
+//        if (menuEntry.icon() != null) {
+//            return new SideNavItem(menuEntry.title(), menuEntry.path(), new Icon(menuEntry.icon()));
+//        } else {
+//            return new SideNavItem(menuEntry.title(), menuEntry.path());
+//        }
+//    }
+//}

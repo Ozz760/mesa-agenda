@@ -11,6 +11,8 @@ import com.vaadin.flow.component.html.Header;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
+import com.vaadin.flow.component.html.Image;
+
 
 public final class ViewToolbar extends Composite<Header> {
 
@@ -18,12 +20,27 @@ public final class ViewToolbar extends Composite<Header> {
         addClassNames(Display.FLEX, FlexDirection.COLUMN, JustifyContent.BETWEEN, AlignItems.STRETCH, Gap.MEDIUM,
                 FlexDirection.Breakpoint.Medium.ROW, AlignItems.Breakpoint.Medium.CENTER);
 
-        var drawerToggle = new DrawerToggle();
-        drawerToggle.addClassNames(Margin.NONE);
+//        var drawerToggle = new DrawerToggle();
+//        drawerToggle.addClassNames(Margin.NONE);
+
+
+        /******************************************************/
+        // Create MESA logo image
+        Image logo = new Image("images/mesa-logo.png", "MESA Logo");
+        logo.setHeight("64px"); // adjust size as needed
+        logo.getStyle().set("margin-right", "0.5rem");
 
         var title = new H1(viewTitle);
         title.addClassNames(FontSize.XLARGE, Margin.NONE, FontWeight.LIGHT);
 
+        // Combine logo and title in a row
+        var logoAndTitle = new Div(logo, title);
+        logoAndTitle.getStyle()
+                .set("display", "flex")
+                .set("align-items", "center")
+                .set("gap", "0.5rem");
+
+        /************************************************************/
         var spacer = new Div();
         spacer.getStyle().set("flex-grow", "1");
 
@@ -41,7 +58,7 @@ public final class ViewToolbar extends Composite<Header> {
         }
 
 
-        var toolbarRow = new Div(drawerToggle, title, rightSection, spacer, userMenu);
+        var toolbarRow = new Div( logoAndTitle, rightSection,spacer, userMenu);
         toolbarRow.getStyle()
                 .set("display", "flex")
                 .set("align-items", "center")
