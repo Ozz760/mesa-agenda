@@ -1,0 +1,22 @@
+{
+  "lumo": {
+    "color": {
+      "background": {
+        "base": "#1e222a",
+        "primary": "#EF4D43"
+      },
+      "text": {
+        "primary": "#ffffff",
+        "secondary": "#cccccc"
+      }
+    }
+  },
+  "dark": {
+    "lumo-color-background": "#1e222a",
+    "lumo-base-color": "#1e222a",
+    "lumo-primary-color": "#EF4D43",
+    "lumo-body-text-color": "#ffffff"
+  }
+}
+
+
