@@ -1,0 +1,21 @@
+:root {
+    --lumo-primary-color: #EF4D43;
+    --lumo-primary-color-50pct: #EF4D4380; /* ~50% opacity */
+    --lumo-primary-color-10pct: #EF4D431A; /* ~10% opacity */
+    --lumo-primary-text-color: white; /* text on buttons, etc */
+
+}
+
+[theme~="dark"] {
+    --lumo-base-color: #1e222a;
+    --lumo-body-text-color: #ffffff;
+    --lumo-primary-color: #EF4D43;
+    --lumo-primary-text-color: white;
+    --lumo-error-color: #ff6f61;
+    --lumo-success-color: #0f9960;
+    background-color: var(--lumo-base-color);
+    color: var(--lumo-body-text-color);
+}
+
+
+
