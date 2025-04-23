@@ -1,5 +1,16 @@
 package com.mesa.agenda.todo.ui.view;
 
+import java.time.Clock;      // ← import this
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Optional;
+
+import jakarta.annotation.security.RolesAllowed;      // ← import this
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Menu;
+import com.vaadin.flow.component.html.Main;
+
 import com.mesa.agenda.base.ui.component.ViewToolbar;
 import com.mesa.agenda.todo.domain.Todo;
 import com.mesa.agenda.todo.service.TodoService;
@@ -11,18 +22,11 @@ import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.Menu;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import static com.vaadin.flow.spring.data.VaadinSpringDataHelpers.toSpringPageRequest;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
-import java.time.Clock;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Optional;
 
-import static com.vaadin.flow.spring.data.VaadinSpringDataHelpers.toSpringPageRequest;
-
+@RolesAllowed("USER")  // ← add this annotation to restrict access to logged-in users
 @Route("")
 @PageTitle("Task List")
 @Menu(order = 0, icon = "vaadin:clipboard-check", title = "Task List")
