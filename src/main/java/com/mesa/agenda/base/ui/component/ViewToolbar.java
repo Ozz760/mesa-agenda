@@ -80,11 +80,13 @@ public final class ViewToolbar extends Composite<Header> {
     private Component createUserMenu() {
         // TODO Replace with real user information and actions
         var avatar = new Avatar("John Smith");
-        avatar.addThemeVariants(AvatarVariant.LUMO_SMALL);
         avatar.addClassNames(Margin.Right.SMALL);
         avatar.getElement().getStyle()
                 .set("background-color", "var(--lumo-primary-color)")
-                .set("color", "white");
+                .set("color", "white")
+                .set("width", "2rem")
+                .set("height", "2rem")
+                .set("font-size", "18px");
 
         toggleDark.setIcon(VaadinIcon.MOON.create());
         toggleDark.addClickListener(e -> toggleDarkTheme());
@@ -106,8 +108,7 @@ public final class ViewToolbar extends Composite<Header> {
         var wrapper = new Div(toggleDark, userMenu);
         wrapper.getStyle()
                 .set("display", "flex")
-                .set("align-items", "center")
-                .set("gap", "0.5rem");
+                .set("align-items", "center");
         return wrapper;
     }
 
