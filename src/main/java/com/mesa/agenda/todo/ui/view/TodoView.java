@@ -50,6 +50,9 @@ public class TodoView extends Main {
         createBtn = new Button("Create", event -> createTodo());
         createBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
+        createBtn = new Button("Update", event -> updateTodo()); //create updateTodo method in this class
+        createBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
         var dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withZone(clock.getZone())
                 .withLocale(getLocale());
         var dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(getLocale());
