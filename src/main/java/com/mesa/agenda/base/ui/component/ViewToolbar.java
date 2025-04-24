@@ -84,8 +84,8 @@ public final class ViewToolbar extends Composite<Header> {
         avatar.getElement().getStyle()
                 .set("background-color", "var(--lumo-primary-color)")
                 .set("color", "white")
-                .set("width", "2rem")
-                .set("height", "2rem")
+                .set("width", "2.2rem")
+                .set("height", "2.2rem")
                 .set("font-size", "18px");
 
         toggleDark.setIcon(VaadinIcon.MOON.create());
