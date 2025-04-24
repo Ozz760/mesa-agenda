@@ -58,4 +58,6 @@ public class Todo extends AbstractEntity<Long> {
     public void setDueDate(@Nullable LocalDate dueDate) {
         this.dueDate = dueDate;
     }
+
+    
 }
