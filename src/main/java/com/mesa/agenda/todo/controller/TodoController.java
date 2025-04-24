@@ -19,7 +19,7 @@ public class TodoController {
 
         Todo newTodo = todoService.createTodo(todo.getDescription(), todo.getDueDate());
 
-        return ResponseEntity.status(201).body(newTodo);
+        return ResponseEntity.status(201).body(newTodo); //201 created
     }
 
     @GetMapping("/{id}")
@@ -38,7 +38,7 @@ public class TodoController {
             Todo updatedTodo = todoService.updateTodo(id, todo.getDescription(), todo.getDueDate());
             return ResponseEntity.ok(updatedTodo);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.status(404).build(); //404 not found
         }
     }
 
@@ -51,5 +51,4 @@ public class TodoController {
             return ResponseEntity.status(404).build();
         }
     }
-
 }
