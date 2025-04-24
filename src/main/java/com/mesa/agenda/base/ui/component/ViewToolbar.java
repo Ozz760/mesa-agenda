@@ -31,21 +31,20 @@ public final class ViewToolbar extends Composite<Header> {
         logo.getStyle().set("margin-right", "0.5rem");
 
         var title = new H1(viewTitle);
-        title.addClassNames(FontSize.XXLARGE, Margin.NONE, FontWeight.LIGHT);
+        title.addClassNames(FontSize.XXLARGE, Margin.NONE, FontWeight.EXTRABOLD);
+
+        var spacer = new Div();
+        spacer.getStyle().set("flex-grow", "1");
 
         var logoAndTitle = new Div(logo, title);
         logoAndTitle.getStyle()
                 .set("display", "flex")
                 .set("align-items", "center")
-                .set("gap", "0.5rem");
+                .set("gap", "2.0rem");
 
 
-        var spacer = new Div();
-        spacer.getStyle().set("flex-grow", "1");
 
         var userMenu = createUserMenu();
-//            var userMenu = createUserControls();
-
 
         Component rightSection;
         if (components.length > 0) {
@@ -53,7 +52,8 @@ public final class ViewToolbar extends Composite<Header> {
             rightSection.getElement().getStyle()
                     .set("display", "flex")
                     .set("align-items", "center")
-                    .set("gap", "0.5rem");
+                    .set("gap", "0.75rem");
+
         } else {
             rightSection = new Div();
         }
