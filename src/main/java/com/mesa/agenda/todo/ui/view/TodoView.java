@@ -41,11 +41,12 @@ public class TodoView extends Main {
         description.setPlaceholder("What do you want to do?");
         description.setAriaLabel("Task description");
         description.setMaxLength(Todo.DESCRIPTION_MAX_LENGTH);
-        description.setMinWidth("20em");
+        description.setMinWidth("30em");
 
         dueDate = new DatePicker();
         dueDate.setPlaceholder("Due date");
         dueDate.setAriaLabel("Due date");
+        dueDate.setMinWidth("15em");
 
         createBtn = new Button("Create", event -> createTodo());
         createBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
