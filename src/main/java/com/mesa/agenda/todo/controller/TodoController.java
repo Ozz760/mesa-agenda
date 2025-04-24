@@ -22,7 +22,27 @@ public class TodoController {
         return ResponseEntity.status(201).body(newTodo);
     }
 
-    @DeleteMapping
+    @GetMapping("/{id}")
+    public ResponseEntity<Todo> readTodo(@PathVariable Long id) {
+        try {
+            Todo todo = todoService.readTodo(id);
+            return ResponseEntity.ok(todo);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Todo> updateTodo(@PathVariable Long id, @RequestBody Todo todo) {
+        try {
+            Todo updatedTodo = todoService.updateTodo(id, todo.getDescription(), todo.getDueDate());
+            return ResponseEntity.ok(updatedTodo);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
         try {
             todoService.deleteTodo(id);
