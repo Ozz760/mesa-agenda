@@ -31,21 +31,20 @@ public final class ViewToolbar extends Composite<Header> {
         logo.getStyle().set("margin-right", "0.5rem");
 
         var title = new H1(viewTitle);
-        title.addClassNames(FontSize.XXLARGE, Margin.NONE, FontWeight.LIGHT);
+        title.addClassNames(FontSize.XXLARGE, Margin.NONE, FontWeight.EXTRABOLD);
+
+        var spacer = new Div();
+        spacer.getStyle().set("flex-grow", "1");
 
         var logoAndTitle = new Div(logo, title);
         logoAndTitle.getStyle()
                 .set("display", "flex")
                 .set("align-items", "center")
-                .set("gap", "0.5rem");
+                .set("gap", "2.0rem");
 
 
-        var spacer = new Div();
-        spacer.getStyle().set("flex-grow", "1");
 
         var userMenu = createUserMenu();
-//            var userMenu = createUserControls();
-
 
         Component rightSection;
         if (components.length > 0) {
@@ -53,7 +52,8 @@ public final class ViewToolbar extends Composite<Header> {
             rightSection.getElement().getStyle()
                     .set("display", "flex")
                     .set("align-items", "center")
-                    .set("gap", "0.5rem");
+                    .set("gap", "0.75rem");
+
         } else {
             rightSection = new Div();
         }
@@ -80,11 +80,13 @@ public final class ViewToolbar extends Composite<Header> {
     private Component createUserMenu() {
         // TODO Replace with real user information and actions
         var avatar = new Avatar("John Smith");
-        avatar.addThemeVariants(AvatarVariant.LUMO_SMALL);
         avatar.addClassNames(Margin.Right.SMALL);
         avatar.getElement().getStyle()
                 .set("background-color", "var(--lumo-primary-color)")
-                .set("color", "white");
+                .set("color", "white")
+                .set("width", "2.2rem")
+                .set("height", "2.2rem")
+                .set("font-size", "18px");
 
         toggleDark.setIcon(VaadinIcon.MOON.create());
         toggleDark.addClickListener(e -> toggleDarkTheme());
@@ -106,8 +108,7 @@ public final class ViewToolbar extends Composite<Header> {
         var wrapper = new Div(toggleDark, userMenu);
         wrapper.getStyle()
                 .set("display", "flex")
-                .set("align-items", "center")
-                .set("gap", "0.5rem");
+                .set("align-items", "center");
         return wrapper;
     }
 
