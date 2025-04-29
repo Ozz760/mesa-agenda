@@ -8,8 +8,10 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Main;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
@@ -41,11 +43,12 @@ public class TodoView extends Main {
         description.setPlaceholder("What do you want to do?");
         description.setAriaLabel("Task description");
         description.setMaxLength(Todo.DESCRIPTION_MAX_LENGTH);
-        description.setMinWidth("20em");
+        description.setMinWidth("30em");
 
         dueDate = new DatePicker();
         dueDate.setPlaceholder("Due date");
         dueDate.setAriaLabel("Due date");
+        dueDate.setMinWidth("15em");
 
         createBtn = new Button("Create", event -> createTodo());
         createBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -63,6 +66,28 @@ public class TodoView extends Main {
         todoGrid.addColumn(todo -> Optional.ofNullable(todo.getDueDate()).map(dateFormatter::format).orElse("Never"))
                 .setHeader("Due Date");
         todoGrid.addColumn(todo -> dateTimeFormatter.format(todo.getCreationDate())).setHeader("Creation Date");
+
+        //delete and edit buttons
+        todoGrid.addComponentColumn(todo -> {
+
+            Button editButton = new Button( new Icon("lumo", "edit"));
+            editButton.getElement().getStyle()
+                    .set("color", "var(--lumo-body-text-color)");
+            editButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+            editButton.setTooltipText("Edit this task");
+
+            Button deleteButton = new Button( new Icon("vaadin", "trash"));
+            deleteButton.getElement().getStyle()
+                    .set("color", "var(--lumo-error-text-color)");
+            deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY_INLINE);
+            deleteButton.setTooltipText("Delete this task");
+
+            var actions = new HorizontalLayout(editButton, deleteButton);
+            actions.setSpacing(false);
+            actions.setPadding(false);
+            return actions;
+        }).setHeader("Actions").setAutoWidth(false).setFlexGrow(0);
+
         todoGrid.setSizeFull();
 
         setSizeFull();
