@@ -19,6 +19,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import java.time.Clock;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Optional;
@@ -35,6 +36,7 @@ public class TodoView extends Main {
     final Button createBtn;
     final Grid<Todo> todoGrid;
     private final TodoService todoService;
+    private Long editingTodoId = null;
 
     public TodoView(TodoService todoService, Clock clock) {
         this.todoService = todoService;
@@ -53,6 +55,7 @@ public class TodoView extends Main {
         createBtn = new Button("Create", event -> createTodo());
         createBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
+
         var dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withZone(clock.getZone())
                 .withLocale(getLocale());
         var dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(getLocale());
@@ -67,17 +70,29 @@ public class TodoView extends Main {
         //delete and edit buttons
         todoGrid.addComponentColumn(todo -> {
 
-            Button editButton = new Button( new Icon("lumo", "edit"));
+            /**************************Edit Button*********************************/
+            Button editButton = new Button(new Icon("lumo", "edit"));
             editButton.getElement().getStyle()
                     .set("color", "var(--lumo-body-text-color)");
             editButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
             editButton.setTooltipText("Edit this task");
+            editButton.addClickListener(e -> {
+                description.setValue(todo.getDescription());
+                dueDate.setValue(todo.getDueDate());
+                editingTodoId = todo.getId();
+                createBtn.setText("Update");
+            });
 
-            Button deleteButton = new Button( new Icon("vaadin", "trash"));
+            /**************************Delete Button*********************************/
+            Button deleteButton = new Button(new Icon("vaadin", "trash"));
             deleteButton.getElement().getStyle()
-                    .set("color", "var(--lumo-error-text-color)");
+                    .set("color", "var(--lumo-error-text-color)"); // todo: change color to MESA orange
             deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY_INLINE);
             deleteButton.setTooltipText("Delete this task");
+            deleteButton.addClickListener(e -> {
+                todoService.deleteTodo(todo.getId());
+                todoGrid.getDataProvider().refreshAll();  // Refresh the grid
+            });
 
             var actions = new HorizontalLayout(editButton, deleteButton);
             actions.setSpacing(false);
@@ -97,11 +112,23 @@ public class TodoView extends Main {
     }
 
     private void createTodo() {
-        todoService.createTodo(description.getValue(), dueDate.getValue());
+        String desc = description.getValue();
+        LocalDate due = dueDate.getValue();
+
+        if (editingTodoId != null) {
+            todoService.updateTodo(editingTodoId, desc, due);
+            editingTodoId = null;
+            createBtn.setText("Create");
+        } else {
+            todoService.createTodo(desc, due);
+        }
+
+        // Reset form
         todoGrid.getDataProvider().refreshAll();
         description.clear();
         dueDate.clear();
-        Notification.show("Task added", 3000, Notification.Position.BOTTOM_END)
+
+        Notification.show("Task saved", 3000, Notification.Position.BOTTOM_END)
                 .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
     }
 
