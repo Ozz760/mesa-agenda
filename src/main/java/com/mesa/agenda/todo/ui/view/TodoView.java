@@ -14,6 +14,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
@@ -141,16 +142,15 @@ public class TodoView extends Main {
         dialogDueDate.setWidthFull();
 
         var spacer = new Div();
-        spacer.setHeight("10%");
+        spacer.setHeight("15%");
 
         todoDialog.add(dialogDescription, dialogDueDate,spacer, dialogButtons);
         todoDialog.setHeaderTitle("Edit Task");
         todoDialog.setHeight("50%");
-        todoDialog.setWidth("30%");
+        todoDialog.setWidth(null);
 
         dialogCancelBtn.addClickListener(e -> {
             todoDialog.close();
-            clearDialogFields();
         });
         dialogCancelBtn.getStyle().set("background-color", "var(--lumo-primary-color)");
 
@@ -163,7 +163,6 @@ public class TodoView extends Main {
 
             todoGrid.getDataProvider().refreshAll();
             todoDialog.close();
-            clearDialogFields();
         });
         dialogSaveBtn.getStyle().set("background-color", "var(--lumo-primary-color)");
 
@@ -193,12 +192,5 @@ public class TodoView extends Main {
         Notification.show("Task saved", 3000, Notification.Position.BOTTOM_END)
                 .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
     }
-
-    private void clearDialogFields() {
-        editingTodoId = null;
-        dialogDescription.clear();
-        dialogDueDate.clear();
-    }
-
 
 }
