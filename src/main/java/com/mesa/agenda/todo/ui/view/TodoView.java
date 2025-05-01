@@ -6,12 +6,15 @@ import com.mesa.agenda.todo.service.TodoService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
@@ -37,6 +40,11 @@ public class TodoView extends Main {
     final Grid<Todo> todoGrid;
     private final TodoService todoService;
     private Long editingTodoId = null;
+    private final Dialog todoDialog = new Dialog();
+    private final TextArea dialogDescription = new TextArea("Description");
+    private final DatePicker dialogDueDate = new DatePicker("Due Date");
+    private final Button dialogSaveBtn = new Button("Save");
+    private final Button dialogCancelBtn = new Button("Cancel");
 
     public TodoView(TodoService todoService, Clock clock) {
         this.todoService = todoService;
@@ -55,6 +63,12 @@ public class TodoView extends Main {
         createBtn = new Button("Create", event -> createTodo());
         createBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
+        dialogDescription.setWidthFull();
+        dialogDescription.setMinHeight("4em");
+        dialogDescription.setMaxHeight("12em");
+        dialogDescription.getStyle().set("resize", "vertical");
+
+
 
         var dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withZone(clock.getZone())
                 .withLocale(getLocale());
@@ -67,23 +81,23 @@ public class TodoView extends Main {
                 .setHeader("Due Date");
         todoGrid.addColumn(todo -> dateTimeFormatter.format(todo.getCreationDate())).setHeader("Creation Date");
 
-        //delete and edit buttons
         todoGrid.addComponentColumn(todo -> {
 
-            /**************************Edit Button*********************************/
+            /**************************EDIT BUTTON*********************************/
             Button editButton = new Button(new Icon("lumo", "edit"));
             editButton.getElement().getStyle()
                     .set("color", "var(--lumo-body-text-color)");
             editButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
             editButton.setTooltipText("Edit this task");
             editButton.addClickListener(e -> {
-                description.setValue(todo.getDescription());
-                dueDate.setValue(todo.getDueDate());
+                dialogDescription.setValue(todo.getDescription());
+                dialogDueDate.setValue(todo.getDueDate());
                 editingTodoId = todo.getId();
-                createBtn.setText("Update");
+                todoDialog.open();
             });
+            /***********************************************************************/
 
-            /**************************Delete Button*********************************/
+            /**************************DELETE BUTTON*********************************/
             Button deleteButton = new Button(new Icon("vaadin", "trash"));
             deleteButton.getElement().getStyle()
                     .set("color", "var(--lumo-error-text-color)"); // todo: change color to MESA orange
@@ -93,7 +107,7 @@ public class TodoView extends Main {
                 todoService.deleteTodo(todo.getId());
                 todoGrid.getDataProvider().refreshAll();  // Refresh the grid
             });
-
+            /**************************************************************/
             var actions = new HorizontalLayout(editButton, deleteButton);
             actions.setSpacing(false);
             actions.setPadding(false);
@@ -102,12 +116,60 @@ public class TodoView extends Main {
 
         todoGrid.setSizeFull();
 
+        /***************DOUBLE CLICK EVENT*********************/
+        todoGrid.addItemDoubleClickListener(event -> {
+            Todo todo = event.getItem();
+            dialogDescription.setValue(todo.getDescription());
+            dialogDueDate.setValue(todo.getDueDate());
+            editingTodoId = todo.getId();
+            todoDialog.open();
+        });
+        /******************************************************/
+
         setSizeFull();
         addClassNames(LumoUtility.BoxSizing.BORDER, LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN,
                 LumoUtility.Padding.MEDIUM, LumoUtility.Gap.SMALL);
 
 
         add(new ViewToolbar("Task List", ViewToolbar.group(description, dueDate, createBtn)));
+
+        /*************************EDIT/VIEW POPUP**************************************/
+        HorizontalLayout dialogButtons = new HorizontalLayout(dialogSaveBtn, dialogCancelBtn);
+        dialogButtons.getStyle().set("gap", "14.0rem");
+
+        dialogDescription.setWidthFull();
+        dialogDueDate.setWidthFull();
+
+        var spacer = new Div();
+        spacer.setHeight("10%");
+
+        todoDialog.add(dialogDescription, dialogDueDate,spacer, dialogButtons);
+        todoDialog.setHeaderTitle("Edit Task");
+        todoDialog.setHeight("50%");
+        todoDialog.setWidth("30%");
+
+        dialogCancelBtn.addClickListener(e -> {
+            todoDialog.close();
+            clearDialogFields();
+        });
+        dialogCancelBtn.getStyle().set("background-color", "var(--lumo-primary-color)");
+
+        dialogSaveBtn.addClickListener(e -> {
+            if (editingTodoId != null) {
+                todoService.updateTodo(editingTodoId, dialogDescription.getValue(), dialogDueDate.getValue());
+            } else {
+                todoService.createTodo(dialogDescription.getValue(), dialogDueDate.getValue());
+            }
+
+            todoGrid.getDataProvider().refreshAll();
+            todoDialog.close();
+            clearDialogFields();
+        });
+        dialogSaveBtn.getStyle().set("background-color", "var(--lumo-primary-color)");
+
+        add(todoDialog);
+
+        /**************************************************************/
         add(todoGrid);
     }
 
@@ -131,5 +193,12 @@ public class TodoView extends Main {
         Notification.show("Task saved", 3000, Notification.Position.BOTTOM_END)
                 .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
     }
+
+    private void clearDialogFields() {
+        editingTodoId = null;
+        dialogDescription.clear();
+        dialogDueDate.clear();
+    }
+
 
 }
