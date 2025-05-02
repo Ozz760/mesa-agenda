@@ -9,7 +9,6 @@ import jakarta.annotation.security.RolesAllowed;      // ← import this
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Menu;
-import com.vaadin.flow.component.html.Main;
 
 import com.mesa.agenda.base.ui.component.ViewToolbar;
 import com.mesa.agenda.todo.domain.Todo;
