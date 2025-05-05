@@ -23,9 +23,13 @@ public class SignUpController {
             @RequestParam String lastName,
             @RequestParam String email,
             @RequestParam String password,
-            @RequestParam String studentName,
-            @RequestParam String role,
-            @RequestParam(required = false, defaultValue = "false") boolean active) {
+            @RequestParam String confirmPassword) {
+
+        // Verify passwords match
+        if (!password.equals(confirmPassword)) {
+            // Redirect back to the sign-up page with an error
+            return "redirect:/signup?error=passwordMismatch";
+        }
 
         // Create and save the Student entity
         Student student = new Student();
@@ -34,9 +38,8 @@ public class SignUpController {
         student.setLastName(lastName);
         student.setEmail(email);
         student.setPassword(password); // Hash the password before saving
-        student.setStudentName(studentName);
-        student.setRole(role);
-        student.setActive(active);
+        student.setRole("STUDENT"); // Default role
+        student.setActive(true); // Default active to true
         student.setCreatedAt(LocalDateTime.now());
 
         // Save the student (implement saving logic, e.g., using a repository)

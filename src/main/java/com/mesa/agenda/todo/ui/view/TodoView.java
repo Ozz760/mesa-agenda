@@ -1,11 +1,11 @@
 package com.mesa.agenda.todo.ui.view;
 
-import java.time.Clock;      // ← import this
+import java.time.Clock;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Optional;
 
-import jakarta.annotation.security.RolesAllowed;      // ← import this
+import jakarta.annotation.security.RolesAllowed;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Menu;
@@ -24,9 +24,11 @@ import com.vaadin.flow.component.textfield.TextField;
 import static com.vaadin.flow.spring.data.VaadinSpringDataHelpers.toSpringPageRequest;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-@RolesAllowed("USER")  // ← add this annotation to restrict access to logged-in users
-@Route("")
+@RolesAllowed("STUDENT") // Restrict access to users with the "STUDENT" role
+@Route("todoview") // Route for the TodoView page
 @PageTitle("Task List")
 @Menu(order = 0, icon = "vaadin:clipboard-check", title = "Task List")
 public class TodoView extends Main {
@@ -41,6 +43,7 @@ public class TodoView extends Main {
     public TodoView(TodoService todoService, Clock clock) {
         this.todoService = todoService;
 
+        // Input fields for creating a new task
         description = new TextField();
         description.setPlaceholder("What do you want to do?");
         description.setAriaLabel("Task description");
@@ -54,18 +57,21 @@ public class TodoView extends Main {
         createBtn = new Button("Create", event -> createTodo());
         createBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
+        // Formatters for displaying dates
         var dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withZone(clock.getZone())
                 .withLocale(getLocale());
         var dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(getLocale());
 
+        // Grid to display tasks
         todoGrid = new Grid<>();
-        todoGrid.setItems(query -> todoService.list(toSpringPageRequest(query)).stream());
+        todoGrid.setItems(query -> todoService.listForUser(getLoggedInUsername(), toSpringPageRequest(query)).stream());
         todoGrid.addColumn(Todo::getDescription).setHeader("Description");
         todoGrid.addColumn(todo -> Optional.ofNullable(todo.getDueDate()).map(dateFormatter::format).orElse("Never"))
                 .setHeader("Due Date");
         todoGrid.addColumn(todo -> dateTimeFormatter.format(todo.getCreationDate())).setHeader("Creation Date");
         todoGrid.setSizeFull();
 
+        // Layout and styling
         setSizeFull();
         addClassNames(LumoUtility.BoxSizing.BORDER, LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN,
                 LumoUtility.Padding.MEDIUM, LumoUtility.Gap.SMALL);
@@ -75,7 +81,8 @@ public class TodoView extends Main {
     }
 
     private void createTodo() {
-        todoService.createTodo(description.getValue(), dueDate.getValue());
+        // Create a new task for the logged-in user
+        todoService.createTodoForUser(description.getValue(), dueDate.getValue(), getLoggedInUsername());
         todoGrid.getDataProvider().refreshAll();
         description.clear();
         dueDate.clear();
@@ -83,4 +90,9 @@ public class TodoView extends Main {
                 .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
     }
 
+    private String getLoggedInUsername() {
+        // Get the username of the currently logged-in user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }
 }

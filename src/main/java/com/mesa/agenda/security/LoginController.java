@@ -8,6 +8,6 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login() {
-        return "login"; // Return the name of your login HTML file
+        return "login"; // Ensure a `login.html` file exists in `src/main/resources/templates`
     }
 }

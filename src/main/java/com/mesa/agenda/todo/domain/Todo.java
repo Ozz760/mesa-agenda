@@ -23,6 +23,9 @@ public class Todo extends AbstractEntity<Long> {
     @Size(max = DESCRIPTION_MAX_LENGTH)
     private String description;
 
+    @Column(name = "username", nullable = false)
+    private String username;
+
     @Column(name = "creation_date", nullable = false)
     private Instant creationDate;
 
@@ -41,6 +44,14 @@ public class Todo extends AbstractEntity<Long> {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Instant getCreationDate() {

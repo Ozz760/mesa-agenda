@@ -7,6 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,16 +20,16 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
-class TodoServiceIT {
+public class TodoServiceIT {
 
     @Autowired
-    TodoService todoService;
+    private TodoService todoService;
 
     @Autowired
-    TodoRepository todoRepository;
+    private TodoRepository todoRepository;
 
     @Autowired
-    Clock clock;
+    private Clock clock;
 
     @AfterEach
     void cleanUp() {
@@ -50,5 +51,25 @@ class TodoServiceIT {
         assertThatThrownBy(() -> todoService.createTodo("X".repeat(Todo.DESCRIPTION_MAX_LENGTH + 1), null))
                 .isInstanceOf(ValidationException.class);
         assertThat(todoRepository.count()).isEqualTo(0);
+    }
+
+    @Test
+    public void testCreateTodo() {
+        String description = "Test Task";
+        LocalDate dueDate = LocalDate.now().plusDays(1);
+
+        Todo todo = todoService.createTodo(description, dueDate);
+
+        assertThat(todo).isNotNull();
+        assertThat(todo.getDescription()).isEqualTo(description);
+        assertThat(todo.getDueDate()).isEqualTo(dueDate);
+    }
+
+    @Test
+    public void testListTodos() {
+        Page<Todo> todos = todoService.list(PageRequest.of(0, 10));
+
+        assertThat(todos).isNotNull();
+        assertThat(todos.getContent()).isNotEmpty();
     }
 }
