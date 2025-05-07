@@ -1,34 +1,21 @@
 package com.mesa.agenda.todo.ui.view;
 
-import com.mesa.agenda.security.SecurityUtils;
-import com.vaadin.flow.component.login.LoginOverlay;
+import com.mesa.agenda.common.security.SecurityUtils;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver; // Import SecurityUtils
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 
-import jakarta.annotation.security.PermitAll;
-
-@PermitAll                          // allow everyone to see the login form
-@Route("login")
-public class LoginView extends LoginOverlay implements BeforeEnterObserver {
-
-  public LoginView() {
-    setAction("login");             // Spring Security’s default form action
-    setOpened(true);
-  }
+@Route("todo-login")
+public class LoginView extends Div implements BeforeEnterObserver {
 
   @Override
   public void beforeEnter(BeforeEnterEvent event) {
-    // if the user is already logged in, send them to the main view
+    System.out.println("Entering LoginView: User logged in status: " + SecurityUtils.isUserLoggedIn());
     if (SecurityUtils.isUserLoggedIn()) {
-      event.forwardTo("");
+      System.out.println("Redirecting to /home");
+      UI.getCurrent().navigate("/home");
     }
-    // show the “bad credentials” message if ?error is present
-    setError(
-      event.getLocation()
-           .getQueryParameters()
-           .getParameters()
-           .containsKey("error")
-    );
   }
 }

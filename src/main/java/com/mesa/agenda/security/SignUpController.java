@@ -1,15 +1,28 @@
 package com.mesa.agenda.security;
 
-import com.mesa.agenda.todo.domain.Student;
+import java.time.LocalDateTime;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDateTime;
+import com.mesa.agenda.todo.domain.Student;
+import com.mesa.agenda.todo.service.StudentService;
 
 @Controller
 public class SignUpController {
+
+    @Autowired
+    private StudentService studentService;
+
+    private final PasswordEncoder passwordEncoder;
+
+    public SignUpController(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @GetMapping("/signup")
     public String showSignUpForm() {
@@ -37,13 +50,13 @@ public class SignUpController {
         student.setFirstName(firstName);
         student.setLastName(lastName);
         student.setEmail(email);
-        student.setPassword(password); // Hash the password before saving
-        student.setRole("STUDENT"); // Default role
+        student.setPassword(passwordEncoder.encode(password)); // Hash the password before saving
+        student.setRole("ROLE_USER"); // Set default role
         student.setActive(true); // Default active to true
         student.setCreatedAt(LocalDateTime.now());
 
-        // Save the student (implement saving logic, e.g., using a repository)
-        // studentRepository.save(student);
+        // Save the student using the service layer
+        studentService.saveStudent(student);
 
         return "redirect:/login"; // Redirect to login page after successful sign-up
     }

@@ -1,21 +1,26 @@
 package com.mesa.agenda.todo.service;
 
-import com.mesa.agenda.todo.domain.Todo;
-import com.mesa.agenda.todo.domain.TodoRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import java.time.Clock;
 import java.time.LocalDate;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.mesa.agenda.todo.domain.Todo;
+import com.mesa.agenda.todo.domain.TodoRepository;
+
 @Service
+@Transactional
 public class TodoService {
 
     private final TodoRepository todoRepository;
     private final Clock clock;
 
-    public TodoService(TodoRepository todoRepository, Clock clock) {
+    public TodoService(TodoRepository todoRepository, Clock clock, StudentService studentService) {
+        // 🟢 Constructor injection for dependencies
+
         this.todoRepository = todoRepository;
         this.clock = clock;
     }

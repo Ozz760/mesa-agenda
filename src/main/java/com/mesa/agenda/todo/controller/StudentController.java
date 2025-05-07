@@ -1,33 +1,57 @@
 package com.mesa.agenda.todo.controller;
 
-import com.mesa.agenda.todo.domain.Student;
-import com.mesa.agenda.todo.repository.StudentRepository;
-import com.mesa.agenda.todo.service.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.mesa.agenda.todo.domain.Student;
+import com.mesa.agenda.todo.service.StudentService;
+
 @RestController
-@RequestMapping("/rest/students")
+@RequestMapping("rest/students")
 @CrossOrigin(origins = "http://localhost:3000") // Adjust the origin as needed
 public class StudentController {
 
     private final StudentService studentService;
-    private final StudentRepository studentRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public StudentController(StudentService studentService, StudentRepository studentRepository, PasswordEncoder passwordEncoder) {
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
-        this.studentRepository = studentRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public List<Student> getAllStudents() {
+        return studentService.getAllStudents();
+    }
+
+    @GetMapping(value = "/html", produces = "text/html")
+    public ResponseEntity<String> getAllStudentsAsHtml() {
+        List<Student> students = studentService.getAllStudents();
+        StringBuilder htmlResponse = new StringBuilder("<html><body><h1>Students</h1><ul>");
+
+        for (Student student : students) {
+            htmlResponse.append("<li>")
+                    .append("ID: ").append(student.getId()).append("<br>")
+                    .append("Name: ").append(student.getFirstName()).append(" ").append(student.getLastName())
+                    .append("<br>")
+                    .append("Email: ").append(student.getEmail()).append("</li><br>");
+        }
+
+        htmlResponse.append("</ul></body></html>");
+        return ResponseEntity.ok().header("Content-Type", "text/html").body(htmlResponse.toString());
+    }
+
+    @GetMapping(value = "/json", produces = "application/json")
+    public List<Student> getAllStudentsAsJson() {
         return studentService.getAllStudents();
     }
 
@@ -39,26 +63,8 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createStudent(@RequestBody Student student) {
-        // Check if the username already exists
-        if (studentRepository.findByUsername(student.getUsername()).isPresent()) {
-            return ResponseEntity.badRequest().body("Username already exists");
-        }
-        // Check if the email already exists
-        if (studentRepository.findByEmail(student.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("Email already exists");
-        }
-
-        // Encode the password before saving
-        student.setPassword(passwordEncoder.encode(student.getPassword()));
-        student.setRole("STUDENT");
-        student.setActive(true);
-        student.setCreatedAt(LocalDateTime.now());
-
-        // Save the student to the database
-        studentRepository.save(student);
-
-        return ResponseEntity.ok("Student created successfully");
+    public void createStudent(@RequestBody Student student) {
+        studentService.saveStudent(student);
     }
 
     @PutMapping("/{id}")

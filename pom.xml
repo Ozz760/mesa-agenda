@@ -57,11 +57,6 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
         <!-- Spring Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -129,6 +124,60 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency> -->
+
+        <!-- Add OAuth2 Client dependency -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
+
+        <!-- Add Micrometer Tracing dependency -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing</artifactId>
+        </dependency>
+
+        <!-- Add Thymeleaf dependency -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <!-- JMX Metrics -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-jmx</artifactId>
+        </dependency>
+
+        <!-- Kafka -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
+        <!-- Liquibase -->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
+
+        <!-- OAuth2 Authorization Server -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-authorization-server</artifactId>
+        </dependency>
+
+        <!-- Add missing dependencies -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
+        <!-- Add Thymeleaf Spring Security integration dependency -->
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -174,21 +223,24 @@
                 <artifactId>vaadin-maven-plugin</artifactId>
                 <version>${vaadin.version}</version>
                 <dependencies>
-                    <!-- Force Jackson 2.18.2 onto the plugin classpath -->
+                    <!-- Exclude Jackson dependencies from the Vaadin Maven plugin -->
                     <dependency>
                         <groupId>com.fasterxml.jackson.core</groupId>
                         <artifactId>jackson-core</artifactId>
                         <version>${jackson.version}</version>
+                        <scope>compile</scope>
                     </dependency>
                     <dependency>
                         <groupId>com.fasterxml.jackson.core</groupId>
                         <artifactId>jackson-databind</artifactId>
                         <version>${jackson.version}</version>
+                        <scope>compile</scope>
                     </dependency>
                     <dependency>
                         <groupId>com.fasterxml.jackson.core</groupId>
                         <artifactId>jackson-annotations</artifactId>
                         <version>${jackson.version}</version>
+                        <scope>compile</scope>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -199,22 +251,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-
-            <!-- Lombok annotation processing -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
-                <configuration>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>1.18.30</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
             </plugin>
         </plugins>
     </build>

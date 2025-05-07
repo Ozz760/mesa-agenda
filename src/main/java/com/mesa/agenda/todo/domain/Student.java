@@ -1,9 +1,15 @@
 package com.mesa.agenda.todo.domain;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity(name = "TodoStudent")
+@Table(name = "todo_student")
 public class Student {
 
     @Id
@@ -25,7 +31,9 @@ public class Student {
     }
 
     // 🟢 Full constructor
-    public Student(Long id, String username, String email, String password, String studentName, String role, boolean active, LocalDateTime createdAt) {
+    public Student(Long id, String username, String firstName, String lastName, String email, String password,
+            String studentName, String role,
+            boolean active, LocalDateTime createdAt) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
@@ -39,41 +47,87 @@ public class Student {
     }
 
     // 🟢 Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getFirstName() { return firstName; }
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
     public void setFirstName(String firstName) {
-        this.firstName = firstName; // Correct assignment
+        this.firstName = firstName;
     }
 
-    public String getLastName() { return lastName; }
+    public String getLastName() {
+        return lastName;
+    }
+
     public void setLastName(String lastName) {
-        this.lastName = lastName; // Correct assignment
+        this.lastName = lastName;
     }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public String getStudentName() { return studentName; }
-    public void setStudentName(String studentName) { this.studentName = studentName; }
+    public String getPassword() {
+        return password;
+    }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-    public boolean isActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
+    public String getStudentName() {
+        return studentName;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    
-       // 🟢 Optional toString() override
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    // 🟢 Optional toString() override
     @Override
     public String toString() {
         return "Student{" +
