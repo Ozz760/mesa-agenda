@@ -19,11 +19,9 @@ public final class ViewToolbar extends Composite<Header> {
 
     private final Button toggleDark = new Button();
 
-
     public ViewToolbar(String viewTitle, Component... components) {
         addClassNames(Display.FLEX, FlexDirection.COLUMN, JustifyContent.BETWEEN, AlignItems.STRETCH, Gap.MEDIUM,
                 FlexDirection.Breakpoint.Medium.ROW, AlignItems.Breakpoint.Medium.CENTER);
-
 
         // MESA logo image
         Image logo = new Image("images/mesa-logo.png", "MESA Logo");
@@ -42,8 +40,6 @@ public final class ViewToolbar extends Composite<Header> {
                 .set("align-items", "center")
                 .set("gap", "2.0rem");
 
-
-
         var userMenu = createUserMenu();
 
         Component rightSection;
@@ -57,7 +53,6 @@ public final class ViewToolbar extends Composite<Header> {
         } else {
             rightSection = new Div();
         }
-
 
         var toolbarRow = new Div(logoAndTitle, rightSection, spacer, userMenu);
         toolbarRow.getStyle()
@@ -79,7 +74,7 @@ public final class ViewToolbar extends Composite<Header> {
 
     private Component createUserMenu() {
         // TODO Replace with real user information and actions
-        var avatar = new Avatar("John Smith");
+        var avatar = new Avatar("Vladimir Kim");
         avatar.addClassNames(Margin.Right.SMALL);
         avatar.getElement().getStyle()
                 .set("background-color", "var(--lumo-primary-color)")
@@ -96,7 +91,6 @@ public final class ViewToolbar extends Composite<Header> {
                 .set("font-size", "20px")
                 .set("margin-left", "0.5rem");
 
-
         var userMenu = new MenuBar();
         userMenu.addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
 
@@ -111,7 +105,6 @@ public final class ViewToolbar extends Composite<Header> {
                 .set("align-items", "center");
         return wrapper;
     }
-
 
     private void toggleDarkTheme() {
         String js = """
@@ -135,6 +128,5 @@ public final class ViewToolbar extends Composite<Header> {
             toggleDark.setIcon(icon);
         });
     }
-
 
 }
