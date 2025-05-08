@@ -3,7 +3,6 @@ package com.mesa.agenda.base.ui.component;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.avatar.Avatar;
-import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
@@ -39,7 +38,7 @@ public final class ViewToolbar extends Composite<Header> {
                 .set("display", "flex")
                 .set("align-items", "center")
                 .set("gap", "2.0rem");
-
+      
         var userMenu = createUserMenu();
 
         Component rightSection;
