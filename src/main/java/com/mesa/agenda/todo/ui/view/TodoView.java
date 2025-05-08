@@ -13,8 +13,8 @@ import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
@@ -40,12 +40,12 @@ public class TodoView extends Main {
     final Button createBtn;
     final Grid<Todo> todoGrid;
     private final TodoService todoService;
-    private Long editingTodoId = null;
     private final Dialog todoDialog = new Dialog();
     private final TextArea dialogDescription = new TextArea("Description");
     private final DatePicker dialogDueDate = new DatePicker("Due Date");
     private final Button dialogSaveBtn = new Button("Save");
     private final Button dialogCancelBtn = new Button("Cancel");
+    private Long editingTodoId = null;
 
     public TodoView(TodoService todoService, Clock clock) {
         this.todoService = todoService;
@@ -63,12 +63,6 @@ public class TodoView extends Main {
 
         createBtn = new Button("Create", event -> createTodo());
         createBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
-        dialogDescription.setWidthFull();
-        dialogDescription.setMinHeight("4em");
-        dialogDescription.setMaxHeight("12em");
-        dialogDescription.getStyle().set("resize", "vertical");
-
 
 
         var dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withZone(clock.getZone())
@@ -100,13 +94,16 @@ public class TodoView extends Main {
 
             /**************************DELETE BUTTON*********************************/
             Button deleteButton = new Button(new Icon("vaadin", "trash"));
-            deleteButton.getElement().getStyle()
-                    .set("color", "var(--lumo-error-text-color)"); // todo: change color to MESA orange
             deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY_INLINE);
+            deleteButton.getElement()
+                    .getStyle()
+                    .set("color", "var(--lumo-primary-color)");
             deleteButton.setTooltipText("Delete this task");
             deleteButton.addClickListener(e -> {
                 todoService.deleteTodo(todo.getId());
                 todoGrid.getDataProvider().refreshAll();  // Refresh the grid
+                Notification.show("Task Deleted", 3000, Notification.Position.BOTTOM_END)
+                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
             });
             /**************************************************************/
             var actions = new HorizontalLayout(editButton, deleteButton);
@@ -135,19 +132,29 @@ public class TodoView extends Main {
         add(new ViewToolbar("Task List", ViewToolbar.group(description, dueDate, createBtn)));
 
         /*************************EDIT/VIEW POPUP**************************************/
-        HorizontalLayout dialogButtons = new HorizontalLayout(dialogSaveBtn, dialogCancelBtn);
-        dialogButtons.getStyle().set("gap", "14.0rem");
+        HorizontalLayout dialogButtons = new HorizontalLayout(dialogCancelBtn, dialogSaveBtn);
+
 
         dialogDescription.setWidthFull();
+        dialogDescription.setMinHeight("6em");
+        dialogDescription.setMaxHeight("6em");
+
+
         dialogDueDate.setWidthFull();
 
-        var spacer = new Div();
-        spacer.setHeight("15%");
+        dialogButtons.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+        dialogCancelBtn.setMinWidth("5em");
+        dialogCancelBtn.setMaxWidth("5em");
+        dialogSaveBtn.setMinWidth("5em");
+        dialogSaveBtn.setMaxWidth("5em");
 
-        todoDialog.add(dialogDescription, dialogDueDate,spacer, dialogButtons);
+
+        var spacer = new Div();
+        spacer.setHeight("10%");
+
+        todoDialog.add(dialogDescription, dialogDueDate, spacer, dialogButtons);
         todoDialog.setHeaderTitle("Edit Task");
         todoDialog.setHeight("50%");
-        todoDialog.setWidth(null);
 
         dialogCancelBtn.addClickListener(e -> {
             todoDialog.close();
@@ -170,6 +177,7 @@ public class TodoView extends Main {
 
         /**************************************************************/
         add(todoGrid);
+
     }
 
     private void createTodo() {
